@@ -15,6 +15,7 @@
     "morgan": "~1.6.1",
     "react": "^0.14.7",
     "react-dom": "^0.14.7",
+    "react-input-calendar": "^0.1.20",
     "serve-favicon": "~2.3.0",
     "sqlite3": "^3.1.1"
   }

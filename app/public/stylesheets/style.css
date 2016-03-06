@@ -1,6 +1,6 @@
 
 body {
-  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 14px "Geneva", Helvetica, Arial, sans-serif;
 }
 a {
   color: #00B7FF;
@@ -10,13 +10,12 @@ a {
 }
 .filter-list input {
   width: 200px;
-  /*width: 100%;*/
-  /*float:left;*/
   padding: 5px;
-  border-radius: 2px 2px 0 0;
+  border-radius: 5px;
   border: 1px;
   color:black;
   font-size: 12px;
+  background-color: #eee;
 }
 .filter-list input:focus {
   outline: none;
@@ -29,7 +28,6 @@ a {
   float:left;
   display:block;
   list-style-type: none;
-  margin: 0;
   color: black;
   padding: 5px 10px;
 }
@@ -42,7 +40,6 @@ a {
   /*display:block;*/
   /*margin-left: -40px;*/
   border-radius: 2px;
-  padding: 0;
 }
 .selected-list-list ul {
   display:block;
@@ -54,9 +51,21 @@ a {
   float:left;
   display:block;
   list-style-type: none;
-  margin: 0;
+  margin-left: 2px;
   background: firebrick;
   color:bisque;
   padding: 5px 10px;
 }
+.input-calendar input{
+  width: 80px;
+  border-radius: 5px;
+  border: 1px;
+  color:black;
+  font-size: 12px;
+  padding:5px;
+  background-color: #eee;
+}
 
+.lists{
+  margin-top:10px;
+}
