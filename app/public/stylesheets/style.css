@@ -1,8 +1,62 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
 
+body {
+  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 a {
   color: #00B7FF;
 }
+.filter-list {
+  border-radius: 2px;
+}
+.filter-list input {
+  width: 200px;
+  /*width: 100%;*/
+  /*float:left;*/
+  padding: 5px;
+  border-radius: 2px 2px 0 0;
+  border: 1px;
+  color:black;
+  font-size: 12px;
+}
+.filter-list input:focus {
+  outline: none;
+}
+.filter-list ul {
+  margin: 0;
+  padding: 0;
+}
+.filter-list ul li {
+  float:left;
+  display:block;
+  list-style-type: none;
+  margin: 0;
+  color: black;
+  padding: 5px 10px;
+}
+.filter-list ul li:hover {
+  background: bisque;
+  color:firebrick;
+}
+
+.selected-list{
+  /*display:block;*/
+  /*margin-left: -40px;*/
+  border-radius: 2px;
+  padding: 0;
+}
+.selected-list-list ul {
+  display:block;
+  /*float:left;*/
+  margin: 0;
+  padding: 0;
+}
+.selected-list ul li{
+  float:left;
+  display:block;
+  list-style-type: none;
+  margin: 0;
+  background: firebrick;
+  color:bisque;
+  padding: 5px 10px;
+}
+
