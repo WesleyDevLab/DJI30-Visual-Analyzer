@@ -1,21 +1,22 @@
 var Calendar = require('react-input-calendar');
-var ReactDOM =require('react-dom');
+var ReactDOM = require('react-dom');
 var React = require('React');
+var $ = require("jquery");
 
 var List = React.createClass({
-    handleClick: function(event, item){
+    handleClick: function (event, item) {
         var quoteCode = item.replace(/[^A-Za-z]/g, "");
         this.props.addSelected(quoteCode);
         //console.log(quoteCode);
     },
 
-    render: function(){
+    render: function () {
         return (
             <ul>
                 {
-                    this.props.items.map(function(item) {
-                        return <li key={item} onClick={this.handleClick} >{item}</li>
-                    },this)
+                    this.props.items.map(function (item) {
+                        return <li key={item} onClick={this.handleClick}>{item}</li>
+                    }, this)
                 }
             </ul>
         )
@@ -23,19 +24,19 @@ var List = React.createClass({
 });
 
 var Selected = React.createClass({
-        handleClick: function(event, item){
+        handleClick: function (event, item) {
             var quoteCode = item.replace(/[^A-Za-z]/g, "");
             this.props.deleteSelected(quoteCode);
             //console.log(quoteCode);
         },
 
-        render: function(){
-            return(
+        render: function () {
+            return (
                 <ul>
                     {
-                        this.props.items.map(function(item) {
+                        this.props.items.map(function (item) {
                             return <li key={item} onClick={this.handleClick}>{item} ✖</li>
-                        },this)
+                        }, this)
                     }
                 </ul>
             )
@@ -44,16 +45,16 @@ var Selected = React.createClass({
 );
 
 var FilteredList = React.createClass({
-    filterList: function(event){
+    filterList: function (event) {
         var updatedList = this.state.initialItems;
-        updatedList = updatedList.filter(function(item){
+        updatedList = updatedList.filter(function (item) {
             return item.search(event.target.value.toUpperCase()) !== -1;
         });
 
         this.setState({searchKeyword: event.target.value.toUpperCase(), items: updatedList});
     },
 
-    getInitialState: function(){
+    getInitialState: function () {
         return {
             initialItems: [
                 "AA",
@@ -96,57 +97,70 @@ var FilteredList = React.createClass({
         }
     },
 
-    componentWillMount: function(){
+    componentWillMount: function () {
         this.setState({items: this.state.initialItems});
     },
 
-    addSelected: function(item){
+    addSelected: function (item) {
         var updatedListSI = this.state.selectedItems;
         var updatedListI = this.state.items;
 
-        if (updatedListSI.indexOf(item) == -1){
+        if (updatedListSI.indexOf(item) == -1) {
             updatedListSI.push(item);
-            if(updatedListI.indexOf(item) != -1){
-                updatedListI.splice(updatedListI.indexOf(item),1);
+            if (updatedListI.indexOf(item) != -1) {
+                updatedListI.splice(updatedListI.indexOf(item), 1);
             }
 
         }
 
-        this.setState({selectedItems: updatedListSI.sort(), items: updatedListI.sort()} ) ;
+        this.setState({selectedItems: updatedListSI.sort(), items: updatedListI.sort()});
     },
 
-    deleteSelected: function(item){
+    deleteSelected: function (item) {
         var updatedListSI = this.state.selectedItems;
         var updatedListI = this.state.items;
 
-        updatedListSI.splice(updatedListSI.indexOf(item),1);
-        if(item.search(this.state.searchKeyword) != -1){
+        updatedListSI.splice(updatedListSI.indexOf(item), 1);
+        if (item.search(this.state.searchKeyword) != -1) {
             updatedListI.push(item);
         }
 
         this.setState({selectedItems: updatedListSI.sort(), items: updatedListI.sort()});
     },
 
-    handleKeyPress: function(event){
+    handleKeyPress: function (event) {
         //todo
-        if(event.key == "Enter"){
-            this.state.items.forEach(function(item){
+        if (event.key == "Enter") {
+            this.state.items.forEach(function (item) {
                 console.log(item);
             });
         }
     },
 
-    render: function(){
+    onSubmit: function (event) {
+        console.log("form submitted");
+    },
+
+    updateStartDate: function (item) {
+        this.setState({startDate: item});
+    },
+    render: function () {
         return (
             <div>
                 <div className="filter-list">
-                    <input type="text" placeholder="Search" onKeyPress={this.handleKeyPress} onChange={this.filterList}/>
-                    <Calendar date={'2015-03-03'} format="YYYY-MM-DD" />
+                    <input type="text" placeholder="Search" onKeyPress={this.handleKeyPress}
+                           onChange={this.filterList}/>
+                    <Calendar onChange={this.updateStartDate} date={this.state.startDate} format="YYYY-MM-DD"/>
+                    <form method="post" onSubmit={this.onSubmit}>
+                        <input type="hidden" name="code" value={this.state.selectedItems}/>
+                        <input type="hidden" name="startDate" value={this.state.startDate}/>
+                        <button className="btn" type="submit"> submit</button>
+                    </form>
                     <div className="lists">
                         <div className="selected-list">
-                            <Selected deleteSelected = {this.deleteSelected}items = {this.state.selectedItems}/>
+                            <Selected deleteSelected={this.deleteSelected} items={this.state.selectedItems}/>
                         </div>
-                        <List addSelected = {this.addSelected} items={this.state.items}/>
+                        <List addSelected={this.addSelected} items={this.state.items}/>
                     </div>
                 </div>
             </div>
@@ -155,5 +169,4 @@ var FilteredList = React.createClass({
 });
 
 
-
-ReactDOM.render(<FilteredList/>, document.getElementById('search-box'));
+ReactDOM.render(<FilteredList/>, document.getElementById('input-field'));
