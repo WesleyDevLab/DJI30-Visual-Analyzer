@@ -15,7 +15,7 @@ form {
     border-radius: 2px;
     box-shadow: 0 0 5px 0 #ddd;
     padding: 10px 10px 10px 10px;
-    overflow: scroll;
+    overflow: overlay;
 }
 
 .filter-list input {

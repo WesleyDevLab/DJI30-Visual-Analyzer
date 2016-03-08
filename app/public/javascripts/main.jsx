@@ -249,7 +249,7 @@ var FilteredList = React.createClass({
                 </div>
                 <div className="data-list">
                     <DataListRender date={this.state.startDate} itemsToRender={this.state.selectedItems} allData={this.state.renderData}/>
-                    <p className="notice">Market closed on weekends and holidays</p>
+                    <small className="notice">Market closed on weekends and holidays</small>
                 </div>
             </div>
         );
