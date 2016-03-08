@@ -2,12 +2,13 @@ var Calendar = require('react-input-calendar');
 var ReactDOM = require('react-dom');
 var React = require('React');
 var $ = require("jquery");
+var d3 = require("d3");
 
 var List = React.createClass({
     handleClick: function (event, item) {
         var quoteCode = item.replace(/[^A-Za-z]/g, "");
         this.props.addSelected(quoteCode);
-        //console.log(quoteCode);
+        this.props.addRenderData(quoteCode);
     },
 
     render: function () {
@@ -27,7 +28,6 @@ var Selected = React.createClass({
         handleClick: function (event, item) {
             var quoteCode = item.replace(/[^A-Za-z]/g, "");
             this.props.deleteSelected(quoteCode);
-            //console.log(quoteCode);
         },
 
         render: function () {
@@ -43,6 +43,54 @@ var Selected = React.createClass({
         }
     }
 );
+
+var DataListRender = React.createClass({
+    render: function () {
+        return (
+            <table>
+                <thead>
+                <tr>
+                    <th>COMPANY</th>
+                    <th>DATE</th>
+                    <th>OPEN</th>
+                    <th>CLOSE</th>
+                    <th>HIGH</th>
+                    <th>LOW</th>
+                    <th>VOLUME</th>
+                </tr>
+                </thead>
+                <tbody>
+                {
+                    this.props.itemsToRender.map(function (item) {
+                        if (this.props.allData && this.props.allData.hasOwnProperty(item)) {
+                            return this.props.allData[item].hasOwnProperty('0') ? (
+                                <tr key={item}>
+                                    <td>{item}</td>
+                                    <td>{this.props.allData[item][0]["DATE"]}</td>
+                                    <td>{this.props.allData[item][0]["OPEN"]}</td>
+                                    <td>{this.props.allData[item][0]["CLOSE"]}</td>
+                                    <td>{this.props.allData[item][0]["HIGH"]}</td>
+                                    <td>{this.props.allData[item][0]["LOW"]}</td>
+                                    <td>{this.props.allData[item][0]["VOLUME"]}</td>
+                                </tr>) : (
+                                <tr key={item}>
+                                    <td>{item}</td>
+                                    <td>{this.props.date}</td>
+                                    <td> - </td>
+                                    <td> - </td>
+                                    <td> - </td>
+                                    <td> - </td>
+                                    <td> - </td>
+                                </tr>
+                            )
+                        }
+                    }, this)
+                }
+                </tbody>
+            </table>
+        )
+    }
+});
 
 var FilteredList = React.createClass({
     filterList: function (event) {
@@ -88,12 +136,12 @@ var FilteredList = React.createClass({
                 "UTX",
                 "WMT",
                 "XOM"
-
             ],
             items: [],
             selectedItems: [],
             searchKeyword: "",
-            startDate: "2015-03-03"
+            startDate: "2015-03-03",
+            renderData: null // cache
         }
     },
 
@@ -125,7 +173,10 @@ var FilteredList = React.createClass({
             updatedListI.push(item);
         }
 
-        this.setState({selectedItems: updatedListSI.sort(), items: updatedListI.sort()});
+        this.setState({
+            selectedItems: updatedListSI.sort(),
+            items: updatedListI.sort()
+        });
     },
 
     handleKeyPress: function (event) {
@@ -137,12 +188,48 @@ var FilteredList = React.createClass({
         }
     },
 
-    onSubmit: function (event) {
-        console.log("form submitted");
+    addRenderData: function (item) {
+        //if already stored in cache
+        if (this.state.renderData && this.state.renderData[item]) {
+            return;
+        }
+
+        //or get data
+        $.ajax({
+            url: '/api',
+            method: 'GET',
+            data: {
+                startDate: this.state.startDate,
+                code: item
+            },
+            success: function (res) {
+                var r = this.state.renderData ? this.state.renderData : {};
+                r[item] = res[0]['DATA'];
+                this.setState({renderData: r});
+
+            }.bind(this)
+        });
     },
 
-    updateStartDate: function (item) {
+    //date changed, refresh cache
+    onDateChange: function (item) {
         this.setState({startDate: item});
+
+        $.ajax({
+            url: '/api',
+            method: 'GET',
+            data: {
+                startDate: item,
+                code: this.state.selectedItems.toString()
+            },
+            success: function (res) {
+                var r = this.state.renderData ? this.state.renderData : {};
+                res.forEach(function (i) {
+                    r[i['CODE']] = i['DATA']
+                });
+                this.setState({renderData: r});
+            }.bind(this)
+        });
     },
     render: function () {
         return (
@@ -150,18 +237,19 @@ var FilteredList = React.createClass({
                 <div className="filter-list">
                     <input type="text" placeholder="Search" onKeyPress={this.handleKeyPress}
                            onChange={this.filterList}/>
-                    <Calendar onChange={this.updateStartDate} date={this.state.startDate} format="YYYY-MM-DD"/>
-                    <form method="post" onSubmit={this.onSubmit}>
-                        <input type="hidden" name="code" value={this.state.selectedItems}/>
-                        <input type="hidden" name="startDate" value={this.state.startDate}/>
-                        <button className="btn" type="submit"> submit</button>
-                    </form>
+                    <Calendar onChange={this.onDateChange} computableFormat="YYYY-MM-DD" date={this.state.startDate}
+                              format="YYYY-MM-DD"/>
                     <div className="lists">
                         <div className="selected-list">
                             <Selected deleteSelected={this.deleteSelected} items={this.state.selectedItems}/>
                         </div>
-                        <List addSelected={this.addSelected} items={this.state.items}/>
+                        <List addRenderData={this.addRenderData} addSelected={this.addSelected}
+                              items={this.state.items}/>
                     </div>
+                </div>
+                <div className="data-list">
+                    <DataListRender date={this.state.startDate} itemsToRender={this.state.selectedItems} allData={this.state.renderData}/>
+                    <p className="notice">Market closed on weekends and holidays</p>
                 </div>
             </div>
         );
@@ -169,4 +257,4 @@ var FilteredList = React.createClass({
 });
 
 
-ReactDOM.render(<FilteredList/>, document.getElementById('input-field'));
+ReactDOM.render(<FilteredList/>, document.getElementById('app'));

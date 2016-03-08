@@ -11,14 +11,11 @@ form {
     display: inline;
 }
 
-.field{
-    box-shadow: 0px 0px 5px 0px #ddd;
-    padding: 10px 10px 10px 10px;
-    overflow: scroll;
-}
-
 .filter-list {
     border-radius: 2px;
+    box-shadow: 0 0 5px 0 #ddd;
+    padding: 10px 10px 10px 10px;
+    overflow: scroll;
 }
 
 .filter-list input {
@@ -90,29 +87,21 @@ form {
     margin-top: 10px;
 }
 
-.btn {
-    background-color:#44c767;
-    border-radius:5px;
-    border:1px solid #18ab29;
-    display:inline-block;
-    cursor:pointer;
-    color:#ffffff;
-    font-size:12px;
-    padding:1 10px;
-    text-decoration:none;
-    text-shadow:0px 1px 0px #2f6627;
+.data-list table {
+    box-shadow: 0 0 5px 0 #ddd;
     transition: 0.3s;
-
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px 10px 10px 10px;
 }
 
-.btn:hover {
-    -moz-box-shadow: 0px 0px 4px 0px #3dc21b;
-    -webkit-box-shadow: 0px 0px 4px 0px #3dc21b;
-    box-shadow: 0px 0px 4px 0px #3dc21b;
-    background-color:#5cbf2a;
+.data-list table thead {
+    text-align: left;
+    color: #aaa;
 }
 
-.btn:active {
-    position:relative;
-    top:1px;
+.notice {
+    font-size:10px;
+    color: #ddd;
+    float:right;
 }
