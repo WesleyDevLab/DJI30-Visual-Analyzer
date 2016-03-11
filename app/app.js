@@ -15,14 +15,13 @@ app.use(bodyParser());
 
 app.get('/api', function (request, response) {
 
-    var date = request.query.startDate;
+    var startDate = request.query.startDate;
+    var endDate = request.query.endDate?request.query.endDate:startDate;
     var codeArray = request.query.code.split(',');
-    console.log(date);
-    console.log(codeArray);
     var ret = [];
 
     var getSingleResult = function (code, callback) {
-        var req = "SELECT * FROM " + code + " WHERE DATE = '" + date + "'";
+        var req = "SELECT * FROM " + code + " WHERE DATE BETWEEN '" + startDate + "' AND '"+ endDate +"'" ;
         db.all(req, function (err, rows) {
             var data = {'CODE': code, 'DATA': rows};
             callback(data);

@@ -83,6 +83,9 @@ form {
     background-color: #eee;
 }
 
+#linech{
+    padding:25px 0 20px 0;
+}
 #paraco{
     padding:25px 0 10px 0;
 }
@@ -137,9 +140,26 @@ form {
     text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
 }
 
+.line-chart,
 .para-co{
     margin-top: 20px;
     padding:5px;
     box-shadow: 0 0 5px 0 #ddd;
     overflow: overlay;
+}
+
+.x.axis path {
+    display: none;
+}
+
+.line-chart-line {
+    fill: none;
+    stroke: firebrick;
+    stroke-width: 1.5px;
+}
+
+#line-chart-parent{
+    padding:5px;
+    margin-top:2opx;
+    box-shadow: 0 0 5px 0 #ddd;
 }

@@ -2,9 +2,8 @@ var Calendar = require('react-input-calendar');
 var ReactDOM = require('react-dom');
 var React = require('react');
 var $ = require("jquery");
-var d3 = require("d3");
 var ParallelCoordinates = require('./parallel-coordinates');
-
+var LineChart = require('./line-chart');
 
 var List = React.createClass({
     handleClick: function (event, item) {
@@ -146,6 +145,7 @@ var FilteredList = React.createClass({
             selectedItems: [],
             searchKeyword: "",
             startDate: "2015-03-03",
+            endDate:"2015-03-03",
             renderData: null // cache
         }
     },
@@ -257,6 +257,7 @@ var FilteredList = React.createClass({
                     <small className="notice">Market closed on weekends and holidays</small>
                 </div>
                 <ParallelCoordinates itemsToRender={this.state.selectedItems} allData={this.state.renderData}/>
+                <LineChart initialItems = {this.state.initialItems} itemsToRender ={this.state.selectedItems}/>
             </div>
         );
     }

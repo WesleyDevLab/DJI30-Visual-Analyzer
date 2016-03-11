@@ -14,7 +14,6 @@ var ParallelCoordinates = React.createClass({
     getInitialState: function () {
         return {
             data: [],
-            highlight: [],
             x: 0,
             y: 0,
             dimensions: []
