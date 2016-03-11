@@ -59,6 +59,7 @@ var DataListRender = React.createClass({
                     <th>HIGH</th>
                     <th>LOW</th>
                     <th>VOLUME</th>
+                    <th>AMOUNT</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -74,10 +75,12 @@ var DataListRender = React.createClass({
                                     <td>{this.props.allData[item][0]["HIGH"]}</td>
                                     <td>{this.props.allData[item][0]["LOW"]}</td>
                                     <td>{this.props.allData[item][0]["VOLUME"]}</td>
+                                    <td>{this.props.allData[item][0]["AMOUNT"]}</td>
                                 </tr>) : (
                                 <tr key={item}>
                                     <td>{item}</td>
                                     <td>{this.props.date}</td>
+                                    <td> - </td>
                                     <td> - </td>
                                     <td> - </td>
                                     <td> - </td>
@@ -253,6 +256,7 @@ var FilteredList = React.createClass({
                     <DataListRender date={this.state.startDate} itemsToRender={this.state.selectedItems} allData={this.state.renderData}/>
                     <small className="notice">Market closed on weekends and holidays</small>
                 </div>
+                <ParallelCoordinates itemsToRender={this.state.selectedItems} allData={this.state.renderData}/>
             </div>
         );
     }
